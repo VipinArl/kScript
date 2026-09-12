@@ -1,4 +1,4 @@
-# 13. Custom Effect Definitions
+# 9. Custom Effect Definitions
 
 Define reusable effects with parameters. Parameters can have default values.
 
@@ -52,4 +52,3 @@ r : pulse(1.5, 1s)
 ```
 
 ---
-

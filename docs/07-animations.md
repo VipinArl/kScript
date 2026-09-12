@@ -21,13 +21,9 @@ c = circle(8, 4.5, 2) : show()
 r = rectangle(3, 2, 4, 3) : draw() { duration: 2s }
 ```
 
----
+### 7.2 Built-in Effects
 
-
-## 8. Built-in Effects
-
-
-### `show()`
+#### 7.2.1 `show()`
 
 Makes the object instantly visible. Default duration: 1ms.
 
@@ -36,7 +32,7 @@ c : show()
 c : show() { startTime: 500ms }
 ```
 
-### `hide()`
+#### 7.2.2 `hide()`
 
 Makes the object instantly invisible. Default duration: 1ms.
 
@@ -44,7 +40,7 @@ Makes the object instantly invisible. Default duration: 1ms.
 c : hide() { startTime: 3s }
 ```
 
-### `draw(clockwise?)`
+#### 7.2.3 `draw(clockwise?)`
 
 Animates drawing the shape stroke-by-stroke. Default duration: 3000ms.
 
@@ -58,7 +54,7 @@ c : draw(false)                         // anticlockwise
 c : draw(true) { duration: 5s, easing: "ease-in-out" }
 ```
 
-### `undraw(clockwise?)`
+#### 7.2.4 `undraw(clockwise?)`
 
 Reverse of `draw` — animates erasing the shape. Default duration: 3000ms.
 
@@ -71,7 +67,7 @@ c : undraw() { startTime: 4s }          // clockwise (default)
 c : undraw(false) { startTime: 4s }     // anticlockwise
 ```
 
-### `move(dx, dy)`
+#### 7.2.5 `move(dx, dy)`
 
 Moves the object by `(dx, dy)` **relative to its current position**. Each chained move starts from where the previous one ended, so serial moves accumulate correctly. Default duration: 3000ms.
 
@@ -82,7 +78,7 @@ c : move(-4, 0) { startTime: 1s, easing: "ease-out-cubic" }
 
 A `0` delta on an axis leaves that axis untouched, so two moves on independent axes compose in `parallel` — e.g. `parallel [ move(11, 0) { easing: "linear" }, move(0, 5) { easing: "ease-out-bounce" } ]` travels horizontally at a constant rate while bouncing vertically.
 
-### `move((x, y))` — absolute form
+#### 7.2.6 `move((x, y))` — absolute form
 
 Moves the object to the **fixed canvas position** `(x, y)`, regardless of where it currently is. Pass a parenthesised coordinate pair as a single argument to use this form.
 
@@ -102,7 +98,7 @@ c : serial [
 ]
 ```
 
-### `scale(sx, sy)`
+#### 7.2.7 `scale(sx, sy)`
 
 Scales the object by factors `sx` and `sy` relative to its **current size**. In a serial chain, each scale multiplies from the size reached by the previous animation. Default duration: 3000ms.
 
@@ -120,7 +116,7 @@ r : scale(2, 2) { pivot: (5, 3), duration: 1s }
 
 A `scale` factor of `1` on an axis is a no-op on that axis, so two scales on independent axes (e.g. `scale(2,1)` and `scale(1,0.3)`) compose in `parallel` instead of overriding each other.
 
-### `scale((sx, sy))` — absolute form
+#### 7.2.8 `scale((sx, sy))` — absolute form
 
 Scales the object to `sx` and `sy` times its **original model size**, ignoring any intermediate animation state. Pass a parenthesised factor pair as a single argument to use this form.
 
@@ -141,7 +137,7 @@ c : serial[
 ] {duration: 500}
 ```
 
-### `rotate(angle)`
+#### 7.2.9 `rotate(angle)`
 
 Rotates the object by `angle` (in degrees, or use `deg` unit). Default duration: 3000ms.
 
@@ -155,7 +151,7 @@ c : rotate(360deg) { duration: 2s, loop: true }
 hand : rotate(360deg) { pivot: (8, 4.5), duration: 6s, loop: true }
 ```
 
-### `fadeIn()`
+#### 7.2.10 `fadeIn()`
 
 Fades the object from fully transparent to fully visible. Default duration: 3000ms.
 
@@ -167,7 +163,7 @@ c = circle(8, 4, 2) : fadeIn()
 c : fadeIn() { duration: 2s }
 ```
 
-### `fadeOut()`
+#### 7.2.11 `fadeOut()`
 
 Fades the object from fully visible to fully transparent. Default duration: 3000ms.
 
@@ -186,15 +182,11 @@ c : serial[
 ]
 ```
 
-### `morph(props)`
+#### 7.2.12 `morph(props)`
 
 Directly animates any shape property with a formula. See [Section 12](#12-morph) for details.
 
----
-
-
-## 9. Animation Properties
-
+### 7.3 Animation Properties
 
 These go inside `{}` after an effect call:
 
@@ -217,13 +209,9 @@ c : move(6, 0) {
 }
 ```
 
-> `easing` values are quoted strings such as `"ease-out-cubic"`. See the full list in [Section 10](#10-easing-functions).
+> `easing` values are quoted strings such as `"ease-out-cubic"`. See the full list in [Section 7.4](#7.4-easing-functions).
 
----
-
-
-## 10. Easing Functions
-
+### 7.4 Easing Functions
 
 Pass as a **quoted string** to the `easing` property.
 
@@ -246,15 +234,11 @@ Pass as a **quoted string** to the `easing` property.
 c : move(4, 0) { easing: "ease-out-bounce" }
 ```
 
----
-
-
-## 11. Group Effects
-
+### 7.5 Group Effects
 
 Chain multiple effects on one object using `serial` or `parallel`.
 
-### `serial [ ... ]`
+#### 7.5.1 `serial [ ... ]`
 
 Effects run one after another (each starts when the previous ends).
 
@@ -267,7 +251,7 @@ c : serial [
 ]
 ```
 
-### `parallel [ ... ]`
+#### 7.5.2 `parallel [ ... ]`
 
 All effects start at the same time.
 
@@ -280,7 +264,7 @@ c : parallel [
 ]
 ```
 
-### Group-level properties
+### 7.6 Group-level properties
 
 A `{}` block after the group applies to all effects:
 
@@ -292,7 +276,7 @@ c : serial [
 ] { delay: 200ms }   // 200ms gap inserted between each effect
 ```
 
-### Overriding individual timings
+### 7.7 Overriding individual timings
 
 Override specific effects with explicit `startTime` to mix serial and parallel behaviour:
 
@@ -304,7 +288,7 @@ c : serial [
 ]
 ```
 
-### Nested groups
+### 7.8 Nested groups
 
 `serial` and `parallel` can be nested freely:
 
@@ -320,4 +304,3 @@ c : serial [
 ```
 
 ---
-

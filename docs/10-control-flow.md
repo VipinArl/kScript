@@ -1,4 +1,8 @@
-# 14. Conditional Statements
+## 10. Control flow statements
+
+These statements helps to change the kScript execution control flow
+
+### 10.1 Conditional Statements
 
 Execute a block based on a condition. The `else` branch is optional. A single statement doesn't need braces.
 
@@ -28,11 +32,7 @@ h = 3
 if (h > 2) c = circle(8, 4.5, h)
 ```
 
----
-
-
-## 15. For Loops
-
+### 10.2 For Loops
 
 Iterate over a list or range.
 
@@ -88,11 +88,7 @@ for (n, i) in nums {
 }
 ```
 
----
-
-
-## 16. Event Flow
-
+### 10.3 Event Flow
 
 Define actions that fire in response to user interactions or playback events.
 
@@ -103,7 +99,7 @@ on (eventType, targetObject) { statement }
 
 `targetObject` is optional — when provided, the event is scoped to that object.
 
-### Event Types
+#### 10.3.1 Event Types
 
 | Event          | Trigger                                           |
 | -------------- | ------------------------------------------------- |
@@ -114,7 +110,7 @@ on (eventType, targetObject) { statement }
 | `time`         | Fires at a specified time                         |
 | `animationEnd` | An animation completes (on targetObject if given) |
 
-### Examples
+** Examples **
 
 ```
 r = rectangle(5, 3, 6, 3)
@@ -152,4 +148,3 @@ on (hover, btn) {
 ```
 
 ---
-

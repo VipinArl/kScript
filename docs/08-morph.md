@@ -1,10 +1,10 @@
-# 12. Morph
+# 8. Morph
 
 `morph` has two distinct forms: **property morph** animates scalar properties of a shape using a time-based formula; **shape morph** smoothly transforms one shape into another.
 
 ---
 
-### 12.1 Property Morph
+### 8.1 Property Morph
 
 Animates any shape property using a time-based formula. The expression can reference `T` (current time), `S` (start time), and `D` (duration).
 
@@ -44,7 +44,7 @@ c : fadeIn(2s)
 
 ---
 
-### 12.2 Shape Morph
+### 8.2 Shape Morph
 
 Smoothly transforms the geometry of one shape into another. The source shape's outline is interpolated point-by-point into the destination shape's outline over the animation duration.
 
@@ -90,4 +90,3 @@ tri : morph[shape: star] { startTime: 1s, duration: 2.5s, easing: "ease-in-out-b
 > **Tip:** The destination shape's visual properties (color, fill, line width) are independent of the morph. Style the destination shape to what you want it to look like after the morph completes.
 
 ---
-

@@ -319,7 +319,7 @@ l = curve("log(x)", [1, 8], (1, 6)) { color: #00b894 }
 l : show()
 ```
 
-## 4.6.1 Parametric Curve Shape
+#### 4.6.1 Parametric Curve Shape
 
 `curve` plots a **parametric curve**, where both the X and Y coordinates are defined by independent mathematical expressions. Instead of drawing `y = f(x)`, the engine evaluates two expressions for every value of the domain variable, producing an open polyline.
 
@@ -341,7 +341,7 @@ curve("xExpr", "yExpr", [x1, x2], (px, py)) {
 | `[x1, x2]` | list   | Domain over which the parameter `x` is swept; `x2` must be greater than `x1` |
 | `(px, py)` | point  | Canvas anchor — the first sampled point is translated to land here           |
 
-### Expression language
+** Expression language **
 
 Both expressions use the same expression language as the regular curve form.
 
@@ -353,7 +353,7 @@ Both expressions use the same expression language as the regular curve form.
 
 A malformed expression (unknown symbol, unknown function, bad syntax) is a compile error with a message.
 
-### Optional props (`{}`)
+** Optional props (`{}`) **
 
 | Property                              | Type   | Default | Description                                                                                               |
 | ------------------------------------- | ------ | ------- | --------------------------------------------------------------------------------------------------------- |
@@ -361,7 +361,7 @@ A malformed expression (unknown symbol, unknown function, bad syntax) is a compi
 | `pointCount`                          | number | auto    | Override the sample count. Default is `ceil((x2 − x1) / 0.1)` capped at 100. Specified value always wins. |
 | `color`, `lineWidth`, `opacity`, etc. | —      | —       | All standard visual properties apply (see §4.8).                                                          |
 
-### Example expressions
+** Example expressions **
 
 | X Expression                | Y Expression                | Draws                 |
 | --------------------------- | --------------------------- | --------------------- |
@@ -375,7 +375,7 @@ A malformed expression (unknown symbol, unknown function, bad syntax) is a compi
 
 Like the regular curve form, all coefficients and constants are written directly in the expressions. There is no separate parameter list.
 
-### Animation
+** Animation **
 
 Either expression may reference the animation clock `T`.
 
@@ -399,7 +399,7 @@ curve(
 
 Whenever `T` appears in either expression, the curve is re-sampled every frame.
 
-### Coordinate system
+** Coordinate system **
 
 Unlike the regular curve form (`y = f(x)`), the parameter `x` is **not** the final horizontal canvas coordinate. Instead, both coordinates are computed independently:
 
@@ -410,15 +410,15 @@ Y = yExpr(x)
 
 The domain variable simply controls progression along the curve.
 
-### Singularities
+** Singularities **
 
 If either expression evaluates to a non-finite value (`NaN`, `Infinity`, or `-Infinity`), that coordinate is clamped to ±1,000,000. No gaps are introduced in the path; the result is a spike.
 
-### Sampling
+** Sampling **
 
 Default sample count is `ceil((x2 − x1) / 0.1)` capped at 100 points. `pointCount` overrides this completely — lower values give a coarser appearance, while higher values produce smoother curves.
 
-### Archimedean Spiral
+** Archimedean Spiral **
 
 ```kscript
 curve(
@@ -431,7 +431,7 @@ curve(
 }
 ```
 
-### Lissajous Figure
+** Lissajous Figure **
 
 ```kscript
 curve(
@@ -445,7 +445,7 @@ curve(
 }
 ```
 
-### Figure Eight (Lemniscate)
+** Figure Eight (Lemniscate) **
 
 ```kscript
 curve(
@@ -459,7 +459,7 @@ curve(
 }
 ```
 
-### Pulsing Circle
+** Pulsing Circle **
 
 ```kscript
 curve(
@@ -669,4 +669,3 @@ p : show()
 ```
 
 ---
-
