@@ -62,11 +62,26 @@ hidden  = false
 
 ### 5.5 String Literals
 
+#### 5.5.1 Plain String
+
 Enclosed in double quotes.
 
 ```
 label = "Hello, World!"
 t = text("Score: 100", 8, 4.5)
+```
+
+#### 5.5.2 Templated Strings
+
+Templated strings allow expressions to be embedded inside a string using ${...}. The expression is evaluated and its result is inserted into the string.
+
+```
+score = 42
+total = 50
+
+label = "Score: ${score}"
+
+t = text("Score perc: ${score*(total/100)}", 8, 4.5)
 ```
 
 ### 5.6 Color Literals
@@ -222,4 +237,3 @@ angle = random(0, TAU)
 ```
 
 ---
-
