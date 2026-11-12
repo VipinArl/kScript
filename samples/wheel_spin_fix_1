@@ -1,0 +1,152 @@
+canvas { BGColor: #05070f }
+
+// ---------- phase times (ms) ----------
+tA = 0
+tCar = 1000
+tFan = 2000
+tSpin = 2400
+tLow = 4400
+tDown = 5200
+tBars = 5800
+tL = 8800
+launchMs = 2600
+tEnd = 13000
+
+// ---------- title ----------
+title = text("Fix 1: the rear fan", 8, 0.8) { color: #ffd166, fontSize: 36, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+title : draw() { startTime: tA, duration: 1000 }
+
+// ---------- road (treadmill) ----------
+ground = line(0.3, 6.2, 15.4, 0) { color: #a8dadc, lineWidth: 2 }
+ground : fadeIn() { startTime: 300, duration: 500 }
+for i in range(0, 22) {
+  dash = line(0.3 + 1.2 * i, 6.6, 0.6, 0) { color: #a8dadc, lineWidth: 3 }
+  dash : fadeIn() { startTime: 300, duration: 500 }
+  dash : move(-6, 0) { startTime: tL, duration: launchMs, easing: "ease-in-quad" }
+}
+
+// ---------- car (side view, scale 0.75, rear at x = 1.5, ground y = 6.2) ----------
+carBody = group [
+  path(true, 1.77, 5.0, 3.87, 4.618, 6.143, 5.038, 6.825, 4.963, 7.972, 5.39, 7.972, 5.72, 1.875, 5.69, 1.5, 5.48, 1.545, 5.068) { fillColor: #e63946, color: #ffffff, lineWidth: 2 },
+  path(true, 2.625, 4.963, 3.825, 4.738, 5.4, 5.023, 5.4, 5.225, 2.625, 5.225) { fillColor: #a8dadc, color: #ffffff, lineWidth: 1 }
+]
+carBody : fadeIn() { startTime: tCar, duration: 700 }
+
+wheelR = group [
+  circle(2.775, 5.638, 0.5625) { fillColor: #14213d, color: #ffffff, lineWidth: 2 },
+  circle(2.775, 5.638, 0.3) { fillColor: #cfd8dc, color: #cfd8dc, lineWidth: 1 },
+  line(2.775, 5.638, 0.3, 0) { color: #14213d, lineWidth: 3 },
+  line(2.775, 5.638, 0, 0.3) { color: #14213d, lineWidth: 3 },
+  line(2.775, 5.638, -0.3, 0) { color: #14213d, lineWidth: 3 },
+  line(2.775, 5.638, 0, -0.3) { color: #14213d, lineWidth: 3 },
+  line(3.155, 5.638, 0.18, 0) { color: #ffd166, lineWidth: 3 },
+  line(2.395, 5.638, -0.18, 0) { color: #ffd166, lineWidth: 3 }
+]
+wheelF = group [
+  circle(6.6, 5.638, 0.5625) { fillColor: #14213d, color: #ffffff, lineWidth: 2 },
+  circle(6.6, 5.638, 0.3) { fillColor: #cfd8dc, color: #cfd8dc, lineWidth: 1 },
+  line(6.6, 5.638, 0.3, 0) { color: #14213d, lineWidth: 3 },
+  line(6.6, 5.638, 0, 0.3) { color: #14213d, lineWidth: 3 },
+  line(6.6, 5.638, -0.3, 0) { color: #14213d, lineWidth: 3 },
+  line(6.6, 5.638, 0, -0.3) { color: #14213d, lineWidth: 3 },
+  line(6.98, 5.638, 0.18, 0) { color: #ffd166, lineWidth: 3 },
+  line(6.22, 5.638, -0.18, 0) { color: #ffd166, lineWidth: 3 }
+]
+wheelR : fadeIn() { startTime: tCar + 200, duration: 600 }
+wheelF : fadeIn() { startTime: tCar + 200, duration: 600 }
+// grip works: both wheels roll with the road (6 units / 0.5625), no slip
+wheelR : rotate(6 / 0.5625) { pivot: (2.775, 5.638), startTime: tL, duration: launchMs, easing: "ease-in-quad" }
+wheelF : rotate(6 / 0.5625) { pivot: (6.6, 5.638), startTime: tL, duration: launchMs, easing: "ease-in-quad" }
+
+// ---------- rear fan cutaway: vent under the car, fan, duct to the tail ----------
+vent = rectangle(3.8, 5.68, 0.4, 0.05) { fillColor: #4cc9f0, color: #4cc9f0, lineWidth: 1 }
+fanHouse = circle(4.0, 5.42, 0.2) { fillColor: #0b1224, color: #4cc9f0, lineWidth: 2 }
+duct = path(false, 3.8, 5.42, 2.2, 5.45, 1.5, 5.5) { color: #4cc9f0, lineWidth: 3 }
+inArrow = path(false, 4.0, 6.15, 4.0, 5.8, 3.88, 5.95, 4.0, 5.8, 4.12, 5.95) { color: #4cc9f0, lineWidth: 3 }
+fanBlades = group [
+  line(4.0, 5.42, 0, -0.17) { color: #ffd166, lineWidth: 3 },
+  line(4.0, 5.42, 0.147, 0.085) { color: #cfd8dc, lineWidth: 3 },
+  line(4.0, 5.42, -0.147, 0.085) { color: #cfd8dc, lineWidth: 3 },
+  circle(4.0, 5.42, 0.04) { fillColor: #cfd8dc, color: #cfd8dc, lineWidth: 1 }
+]
+vent : fadeIn() { startTime: tFan, duration: 500 }
+fanHouse : fadeIn() { startTime: tFan, duration: 500 }
+duct : draw() { startTime: tFan + 200, duration: 700 }
+inArrow : fadeIn() { startTime: tFan + 500, duration: 500 }
+fanBlades : fadeIn() { startTime: tFan + 300, duration: 500 }
+fanBlades : rotate(90 * PI) { pivot: (4.0, 5.42), startTime: tSpin, duration: 9000, easing: "ease-in-quad" }
+
+fanLbl = text("rear fan", 4.0, 3.55) { color: #4cc9f0, fontSize: 26, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+fanLn = line(4.0, 3.75, 0, 1.4) { color: #4cc9f0, lineWidth: 1.5 }
+fanLbl : draw() { startTime: tFan + 400, duration: 600 }
+fanLn : draw() { startTime: tFan + 700, duration: 400 }
+fanLbl : undraw() { startTime: tDown - 200, duration: 500 }
+fanLn : undraw() { startTime: tDown - 200, duration: 500 }
+
+// ---------- airflow: sucked in under the car, blown out of the tail ----------
+for i in range(0, 24) {
+  st = line(5.9, 5.82 + 0.13 * (i % 3), 0.4, 0) { color: #a8dadc, lineWidth: 2, opacity: 0 }
+  st : show() { startTime: tSpin + 400 + 250 * i }
+  st : move(-1.9, 0) { startTime: tSpin + 400 + 250 * i, duration: 550, easing: "ease-in-quad" }
+  st : morph[opacity: 0.9 * (1 - clamp((T - S) / D, 0, 1))] { startTime: tSpin + 400 + 250 * i, duration: 550, easing: "linear" }
+  st : hide()
+
+  ex = line(1.5, 5.48 + 0.07 * sin(i * 2.0), 0.4, 0) { color: #e8fbff, lineWidth: 2, opacity: 0 }
+  ex : show() { startTime: tSpin + 500 + 250 * i }
+  ex : move(-1.3, 0) { startTime: tSpin + 500 + 250 * i, duration: 450, easing: "ease-out-quad" }
+  ex : morph[opacity: 0.9 * (1 - clamp((T - S) / D, 0, 1))] { startTime: tSpin + 500 + 250 * i, duration: 450, easing: "linear" }
+  ex : hide()
+}
+
+// ---------- pressure explanation ----------
+cap1 = text("the fan pulls the air out from under the car", 8, 8.2) { color: #4cc9f0, fontSize: 26, fontFamily: "Georgia", fontStyle: "italic", textAlign: "center" }
+cap1 : draw() { startTime: 3000, duration: 1400 }
+cap1 : undraw() { startTime: 5000, duration: 500 }
+
+lowLn = line(4.8, 7.15, 0, -1.1) { color: #4cc9f0, lineWidth: 1.5 }
+lowTxt = text("low pressure", 4.8, 7.5) { color: #4cc9f0, fontSize: 24, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+lowLn : draw() { startTime: tLow, duration: 500 }
+lowTxt : draw() { startTime: tLow, duration: 700 }
+lowLn : undraw() { startTime: tL - 300, duration: 400 }
+lowTxt : undraw() { startTime: tL - 300, duration: 400 }
+
+cap2 = text("the air above pushes the car down: more downforce", 8, 8.2) { color: #ffd166, fontSize: 26, fontFamily: "Georgia", fontStyle: "italic", textAlign: "center" }
+cap2 : draw() { startTime: tDown, duration: 1400 }
+cap2 : undraw() { startTime: 8000, duration: 500 }
+topTxt = text("air above", 4.7, 2.7) { color: #ffd166, fontSize: 24, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+topTxt : draw() { startTime: tDown, duration: 600 }
+for j in range(0, 3) {
+  ar = path(false, 3.6 + 1.1 * j, 3.2, 3.6 + 1.1 * j, 4.3, 3.45 + 1.1 * j, 4.05, 3.6 + 1.1 * j, 4.3, 3.75 + 1.1 * j, 4.05) { color: #ffd166, lineWidth: 5 }
+  ar : draw() { startTime: tDown + 200 * j, duration: 500 }
+  ar : undraw() { startTime: tL - 300, duration: 400 }
+}
+topTxt : undraw() { startTime: tL - 300, duration: 400 }
+
+// ---------- bars: grip with and without the fan (1 g = 1.5 units) ----------
+l1 = text("car needs 33 m/s²  (3.4 g)", 11.8, 2.6) { color: #ff9d2f, fontSize: 24, fontFamily: "Georgia", textAlign: "center" }
+b1 = line(9.2, 3.1, 5.1, 0) { color: #ff9d2f, lineWidth: 16 }
+l2 = text("grip without the fan: 1 g", 11.8, 4.0) { color: #4cc9f0, fontSize: 24, fontFamily: "Georgia", textAlign: "center" }
+b2 = line(9.2, 4.5, 1.5, 0) { color: #4cc9f0, lineWidth: 16 }
+l3 = text("grip with the fan: more than 3.4 g", 11.8, 5.4) { color: #7cff6b, fontSize: 24, fontFamily: "Georgia", textAlign: "center" }
+b3 = line(9.2, 5.9, 5.4, 0) { color: #7cff6b, lineWidth: 16 }
+l1 : draw() { startTime: tBars, duration: 600 }
+b1 : draw() { startTime: tBars + 500, duration: 800, easing: "ease-out-quad" }
+l2 : draw() { startTime: tBars + 1400, duration: 600 }
+b2 : draw() { startTime: tBars + 1900, duration: 500, easing: "ease-out-quad" }
+l3 : draw() { startTime: tBars + 2500, duration: 700 }
+b3 : draw() { startTime: tBars + 3000, duration: 1000, easing: "ease-out-quad" }
+
+cap3 = text("more grip: no extra weight, no new tires", 8, 8.2) { color: #7cff6b, fontSize: 28, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+cap3 : draw() { startTime: 8000, duration: 1200 }
+cap3 : undraw() { startTime: 11000, duration: 400 }
+
+gripTag = text("tires grip: no slip", 4.7, 7.5) { color: #7cff6b, fontSize: 24, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+gripTag : draw() { startTime: tL + 600, duration: 700 }
+gripTag : undraw() { startTime: 11000, duration: 400 }
+
+noteEst = text("illustrative, estimated values", 8, 8.85) { color: #a8dadc, fontSize: 14, fontFamily: "Georgia", fontStyle: "italic", textAlign: "center" }
+noteEst : fadeIn() { startTime: 300, duration: 500 }
+
+// ---------- conclusion (last effect ends at 13000) ----------
+endTxt = text("Rear fan: more downforce, more grip, no wheel spin", 8, 8.2) { color: #ffd166, fontSize: 30, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+endTxt : draw() { startTime: 11400, duration: 1600 }
