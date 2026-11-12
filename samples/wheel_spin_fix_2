@@ -1,0 +1,147 @@
+canvas { BGColor: #05070f }
+
+// ---------- phase times (ms) ----------
+tA = 0
+tCar = 1000
+tBadge = 1800
+tL = 4000
+launchMs = 7000
+tEnd = 13000
+
+// ---------- title ----------
+title = text("Fix 2: four thrusters at the back", 8, 0.8) { color: #ffd166, fontSize: 36, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+title : draw() { startTime: tA, duration: 1000 }
+
+// ---------- road (treadmill) ----------
+ground = line(0.3, 6.2, 15.4, 0) { color: #a8dadc, lineWidth: 2 }
+ground : fadeIn() { startTime: 300, duration: 500 }
+for i in range(0, 22) {
+  dash = line(0.3 + 1.2 * i, 6.6, 0.6, 0) { color: #a8dadc, lineWidth: 3 }
+  dash : fadeIn() { startTime: 300, duration: 500 }
+  dash : move(-9, 0) { startTime: tL, duration: launchMs, easing: "ease-in-quad" }
+}
+
+// ---------- car (side view, scale 0.75, rear at x = 1.5, ground y = 6.2) ----------
+carBody = group [
+  path(true, 1.77, 5.0, 3.87, 4.618, 6.143, 5.038, 6.825, 4.963, 7.972, 5.39, 7.972, 5.72, 1.875, 5.69, 1.5, 5.48, 1.545, 5.068) { fillColor: #e63946, color: #ffffff, lineWidth: 2 },
+  path(true, 2.625, 4.963, 3.825, 4.738, 5.4, 5.023, 5.4, 5.225, 2.625, 5.225) { fillColor: #a8dadc, color: #ffffff, lineWidth: 1 },
+  rectangle(3.3, 5.3, 1.9, 0.3) { fillColor: rgba(76,201,240,0.4), color: #4cc9f0, lineWidth: 1.5 }
+]
+carBody : fadeIn() { startTime: tCar, duration: 700 }
+
+wheelR = group [
+  circle(2.775, 5.638, 0.5625) { fillColor: #14213d, color: #ffffff, lineWidth: 2 },
+  circle(2.775, 5.638, 0.3) { fillColor: #cfd8dc, color: #cfd8dc, lineWidth: 1 },
+  line(2.775, 5.638, 0.3, 0) { color: #14213d, lineWidth: 3 },
+  line(2.775, 5.638, 0, 0.3) { color: #14213d, lineWidth: 3 },
+  line(2.775, 5.638, -0.3, 0) { color: #14213d, lineWidth: 3 },
+  line(2.775, 5.638, 0, -0.3) { color: #14213d, lineWidth: 3 },
+  line(3.155, 5.638, 0.18, 0) { color: #ffd166, lineWidth: 3 },
+  line(2.395, 5.638, -0.18, 0) { color: #ffd166, lineWidth: 3 }
+]
+wheelF = group [
+  circle(6.6, 5.638, 0.5625) { fillColor: #14213d, color: #ffffff, lineWidth: 2 },
+  circle(6.6, 5.638, 0.3) { fillColor: #cfd8dc, color: #cfd8dc, lineWidth: 1 },
+  line(6.6, 5.638, 0.3, 0) { color: #14213d, lineWidth: 3 },
+  line(6.6, 5.638, 0, 0.3) { color: #14213d, lineWidth: 3 },
+  line(6.6, 5.638, -0.3, 0) { color: #14213d, lineWidth: 3 },
+  line(6.6, 5.638, 0, -0.3) { color: #14213d, lineWidth: 3 },
+  line(6.98, 5.638, 0.18, 0) { color: #ffd166, lineWidth: 3 },
+  line(6.22, 5.638, -0.18, 0) { color: #ffd166, lineWidth: 3 }
+]
+wheelR : fadeIn() { startTime: tCar + 200, duration: 600 }
+wheelF : fadeIn() { startTime: tCar + 200, duration: 600 }
+// the tires only roll: angle = road distance 9 / radius 0.5625
+wheelR : rotate(9 / 0.5625) { pivot: (2.775, 5.638), startTime: tL, duration: launchMs, easing: "ease-in-quad" }
+wheelF : rotate(9 / 0.5625) { pivot: (6.6, 5.638), startTime: tL, duration: launchMs, easing: "ease-in-quad" }
+
+// ---------- 4 rear nozzles ----------
+ny = [5.12, 5.24, 5.36, 5.48]
+nx = [1.55, 1.52, 1.5, 1.5]
+badgeY = [3.6, 4.1, 4.6, 5.1]
+for i in range(0, 4) {
+  plate = rectangle(nx[i] - 0.03, ny[i] - 0.05, 0.07, 0.1) { fillColor: #4cc9f0, color: #4cc9f0, lineWidth: 1 }
+  plate : fadeIn() { startTime: tBadge, duration: 400 }
+
+  bLn = line(0.95, badgeY[i], nx[i] - 0.95, ny[i] - badgeY[i]) { color: #7cff6b, lineWidth: 1.5 }
+  bCi = circle(0.75, badgeY[i], 0.2) { fillColor: #05070f, color: #7cff6b, lineWidth: 2.5 }
+  bNm = text("${i + 1}", 0.75, badgeY[i]) { color: #7cff6b, fontSize: 20, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+  bLn : draw() { startTime: tBadge + 200 * i, duration: 400 }
+  bCi : draw() { startTime: tBadge + 200 * i, duration: 400 }
+  bNm : draw() { startTime: tBadge + 200 * i, duration: 400 }
+  bLn : undraw() { startTime: 3500, duration: 400 }
+  bCi : undraw() { startTime: 3500, duration: 400 }
+  bNm : undraw() { startTime: 3500, duration: 400 }
+}
+tankLbl = text("compressed air tank", 4.9, 3.6) { color: #4cc9f0, fontSize: 24, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+tankLn = line(4.4, 3.8, -0.1, 1.55) { color: #4cc9f0, lineWidth: 1.5 }
+tankLbl : draw() { startTime: 2400, duration: 800 }
+tankLn : draw() { startTime: 2700, duration: 400 }
+tankLbl : undraw() { startTime: 3500, duration: 400 }
+tankLn : undraw() { startTime: 3500, duration: 400 }
+
+// ---------- four jets: outer plume + bright core ----------
+for i in range(0, 4) {
+  jo = path(true, nx[i], ny[i] - 0.045, nx[i], ny[i] + 0.045, nx[i] - 1.3, ny[i]) { fillColor: #4cc9f0, color: #4cc9f0, lineWidth: 1, opacity: 0 }
+  jc = path(true, nx[i], ny[i] - 0.025, nx[i], ny[i] + 0.025, nx[i] - 0.8, ny[i]) { fillColor: #e8fbff, color: #e8fbff, lineWidth: 1, opacity: 0 }
+  jo : show() { startTime: tL }
+  jc : show() { startTime: tL }
+  jo : morph[opacity: 0.9 * clamp(6 * clamp((T - S) / D, 0, 1), 0, 1) * (0.85 + 0.15 * sin(80 * clamp((T - S) / D, 0, 1) + i)) * clamp(6 * (1 - clamp((T - S) / D, 0, 1)), 0, 1)] { startTime: tL, duration: launchMs, easing: "linear" }
+  jc : morph[opacity: clamp(6 * clamp((T - S) / D, 0, 1), 0, 1) * (0.9 + 0.1 * sin(90 * clamp((T - S) / D, 0, 1) + i)) * clamp(6 * (1 - clamp((T - S) / D, 0, 1)), 0, 1)] { startTime: tL, duration: launchMs, easing: "linear" }
+  jo : hide()
+  jc : hide()
+}
+
+// ---------- fast air particles shooting out of the back ----------
+for i in range(0, 30) {
+  ap = circle(nx[i % 4] - 0.2, ny[i % 4], 0.05) { fillColor: #e8fbff, color: #e8fbff, lineWidth: 1, opacity: 0 }
+  ap : show() { startTime: tL + 200 + 220 * i }
+  ap : move(-1.5, 0) { startTime: tL + 200 + 220 * i, duration: 350, easing: "ease-out-quad" }
+  ap : morph[opacity: 0.9 * (1 - clamp((T - S) / D, 0, 1))] { startTime: tL + 200 + 220 * i, duration: 350, easing: "linear" }
+  ap : hide()
+}
+
+// ---------- captions and the forward push ----------
+cap1 = text("compressed air is released through 4 nozzles", 8, 8.2) { color: #4cc9f0, fontSize: 26, fontFamily: "Georgia", fontStyle: "italic", textAlign: "center" }
+cap1 : draw() { startTime: 2400, duration: 1400 }
+cap1 : undraw() { startTime: 3700, duration: 300 }
+
+cap2 = text("the air leaves the back at great speed", 8, 8.2) { color: #4cc9f0, fontSize: 26, fontFamily: "Georgia", fontStyle: "italic", textAlign: "center" }
+cap2 : draw() { startTime: 4400, duration: 1400 }
+cap2 : undraw() { startTime: 6600, duration: 400 }
+
+pushArrow = path(false, 3.0, 3.5, 6.2, 3.5, 5.9, 3.3, 6.2, 3.5, 5.9, 3.7) { color: #7cff6b, lineWidth: 6 }
+pushTxt = text("pushed forward", 4.6, 3.0) { color: #7cff6b, fontSize: 26, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+pushArrow : draw() { startTime: 5200, duration: 700 }
+pushTxt : draw() { startTime: 5400, duration: 800 }
+pushArrow : undraw() { startTime: 10600, duration: 400 }
+pushTxt : undraw() { startTime: 10600, duration: 400 }
+
+cap3 = text("the tires only have to roll: no wheel spin", 8, 8.2) { color: #7cff6b, fontSize: 28, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+cap3 : draw() { startTime: 7000, duration: 1400 }
+cap3 : undraw() { startTime: 10600, duration: 400 }
+
+// ---------- stacked bar: who provides the 3.4 g (1 g = 1.5 units) ----------
+l1 = text("car needs 33 m/s²  (3.4 g)", 11.8, 2.6) { color: #ff9d2f, fontSize: 24, fontFamily: "Georgia", textAlign: "center" }
+b1 = line(9.2, 3.1, 5.1, 0) { color: #ff9d2f, lineWidth: 16 }
+l2 = text("who provides it?", 11.8, 4.0) { color: #a8dadc, fontSize: 22, fontFamily: "Georgia", fontStyle: "italic", textAlign: "center" }
+tireSeg = line(9.2, 4.5, 1.2, 0) { color: #4cc9f0, lineWidth: 16 }
+jetSeg = line(10.4, 4.5, 3.9, 0) { color: #7cff6b, lineWidth: 16 }
+tireLbl = text("tires 0.8 g", 9.8, 5.1) { color: #4cc9f0, fontSize: 20, fontFamily: "Georgia", textAlign: "center" }
+jetLbl = text("4 thrusters 2.6 g", 12.35, 5.1) { color: #7cff6b, fontSize: 20, fontFamily: "Georgia", textAlign: "center" }
+tireNote = text("tire share stays under the 1 g grip limit", 11.8, 5.9) { color: #4cc9f0, fontSize: 22, fontFamily: "Georgia", fontStyle: "italic", textAlign: "center" }
+l1 : draw() { startTime: 5000, duration: 600 }
+b1 : draw() { startTime: 5400, duration: 800, easing: "ease-out-quad" }
+l2 : draw() { startTime: 6300, duration: 600 }
+tireSeg : draw() { startTime: 6800, duration: 500, easing: "ease-out-quad" }
+jetSeg : draw() { startTime: 7300, duration: 1000, easing: "ease-out-quad" }
+tireLbl : draw() { startTime: 7000, duration: 500 }
+jetLbl : draw() { startTime: 7800, duration: 600 }
+tireNote : draw() { startTime: 8600, duration: 1200 }
+
+noteEst = text("illustrative, estimated values", 8, 8.85) { color: #a8dadc, fontSize: 14, fontFamily: "Georgia", fontStyle: "italic", textAlign: "center" }
+noteEst : fadeIn() { startTime: 300, duration: 500 }
+
+// ---------- conclusion (last effect ends at 13000) ----------
+endTxt = text("4 rear thrusters push the car, not the tires", 8, 8.2) { color: #ffd166, fontSize: 30, fontFamily: "Georgia", fontWeight: "bold", textAlign: "center" }
+endTxt : draw() { startTime: 11400, duration: 1600 }
